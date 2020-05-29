@@ -391,27 +391,76 @@ int is_subset(set sub, set sup) {
 }
 
 int main() {
-    string names[7] = {
-        from_literal("Hello"),
-        from_literal("World"),
-        from_literal("You"),
-        from_literal("Suck"),
-        from_literal("Balls"),
-        from_literal("Don\'t"),
-        from_literal("Magic"),
-    };
-    string other_names[2] = {
-        from_literal("Magic"),
-        from_literal("World"),
-    };
-    set name_set1 = set_from_array(names, 7);
-    set name_set2 = set_from_array(other_names, 2);
-    remove_from_set(&name_set1, from_literal("You"));
-    print_set(name_set1, println);
-    printf("Caldinality of name_set is: %d\n", cardinality(name_set1));
-    printf("Does \'You\' exist in set: %d\n", exists_in(name_set1, from_literal("You")));
-    printf("Does \'Magic\' exist in set: %d\n", exists_in(name_set1, from_literal("Magic")));
-    printf("%s\n", "===SUBSET===");
-    int is_sub = is_subset(name_set2, name_set1);
-    printf("%d\n", is_sub);
+    set s1 = new_set();
+    int c1;
+    printf("Enter number of items in first set: ");
+    scanf("%d", &c1);
+    for (int i = 0; i < c1; i++) {
+        char temp[32];
+        printf("Enter string to add to set 1: ");
+        scanf("%s", temp);
+        insert_into(&s1, from_literal(temp));
+    }
+    printf("===SET 1===\n");
+    print_set(s1, println);
+
+    set s2 = new_set();
+    int c2;
+    printf("Enter number of items in second set: ");
+    scanf("%d", &c2);
+    for (int i = 0; i < c1; i++) {
+        char temp[32];
+        printf("Enter string to add to set 2: ");
+        scanf("%s", temp);
+        insert_into(&s2, from_literal(temp));
+    }
+    printf("===SET 2===\n");
+    print_set(s2, println);
+
+    printf("===SEARCH===\n");
+    char temp[32];
+    printf("Enter search term: ");
+    scanf("%s", temp);
+    string query = from_literal(temp);
+    printf("Query found in s1: %d\n", exists_in(s1, query));
+    printf("Query found in s2: %d\n", exists_in(s2, query));
+
+    printf("===REMOVAL===\n");
+    printf("REMOVAL will affect union/intersection/difference\n");
+    printf("Enter set from which you want to remove (1 oder 2)\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice == 1) {
+        printf("Removing from 1");
+        char temp[32];
+        printf("Enter removal term: ");
+        scanf("%s", temp);
+        string query = from_literal(temp);
+        remove_from_set(&s1, query);
+        printf("===SET 1===\n");
+        print_set(s1, println);
+    } else if (choice == 2) {
+        printf("Removing from 2");
+        char temp[32];
+        printf("Enter removal term: ");
+        scanf("%s", temp);
+        string query = from_literal(temp);
+        remove_from_set(&s2, query);
+        printf("===SET 2===\n");
+        print_set(s2, println);
+    } else {
+        printf("Skipping removal due to invalid choice\n");
+    }
+    
+    printf("===UNION===\n");
+    print_set(set_union(s1, s2), println);
+
+    printf("===INTERSECTION===\n");
+    print_set(set_intersection(s1, s2), println);
+
+    printf("===DIFFERENCE===\n");
+    print_set(set_difference(s1, s2), println);
+
+    printf("===SUBSET===\n");
+    printf("Is set 2 subset of s2?: %d\n", is_subset(s2, s1));
 }
